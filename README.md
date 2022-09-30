@@ -3,47 +3,47 @@ This workflow consists of 11 workflows as follows:
 
 - **workflow/download.smk**: Data downloading
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/download.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/download.png?raw=true)
 
 - **workflow/gtf.smk**: GTF file preprocessing
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/gtf.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/gtf.png?raw=true)
 
 - **workflow/cellranger.smk**: `CellRanger` mkref and count
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/cellranger.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/cellranger.png?raw=true)
 
 - **workflow/seurat.smk**: `Seurat` against each dataset, data integration, and marker detection
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/seurat.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/seurat.png?raw=true)
 
 - **workflow/doublet.smk**: Doublet detection by `XXXXXXXXXXXX`
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/doublet.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/doublet.png?raw=true)
 
 - **workflow/trajectory.smk**: Trajectory inference by `Monocle`
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/trajectory.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/trajectory.png?raw=true)
 
 - **workflow/velocity.smk**: RNA velocity analysis by `Velociraptor`
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/velocity.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/velocity.png?raw=true)
 
 - **workflow/plot.smk**: Plots against cluster labels (before celltyping)
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/plot.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/plot.png?raw=true)
 
 - **workflow/report.smk**: Interactive report by `Pagoda2`
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/report.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/report.png?raw=true)
 
 - **workflow/celltyping.smk**: Celltyping based on manual selection of cluster-specific markers
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/celltyping.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/celltyping.png?raw=true)
 
 - **workflow/plot_aftercelltyping.smk**: Plots against cell type labels (after celltyping)
 
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/master/plot/plot_aftercelltyping.png?raw=true)
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/plot_aftercelltyping.png?raw=true)
 
 ## Requirements
 - Bash: GNU bash, version 4.2.46(1)-release (x86_64-redhat-linux-gnu)
