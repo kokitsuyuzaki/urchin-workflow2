@@ -5,6 +5,10 @@ This workflow consists of 11 workflows as follows:
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/download.png?raw=true)
 
+- **workflow/preprocess.smk**: Data preprocessing
+
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/preprocess.png?raw=true)
+
 - **workflow/gtf.smk**: GTF file preprocessing
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/gtf.png?raw=true)
@@ -17,15 +21,15 @@ This workflow consists of 11 workflows as follows:
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/seurat.png?raw=true)
 
-- **workflow/doublet.smk**: Doublet detection by `XXXXXXXXXXXX`
+- **workflow/doublet.smk**: Doublet detection by `scDblFinder`
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/doublet.png?raw=true)
 
-- **workflow/trajectory.smk**: Trajectory inference by `Monocle`
+- **workflow/trajectory.smk**: Trajectory inference by `Monocle3`
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/trajectory.png?raw=true)
 
-- **workflow/velocity.smk**: RNA velocity analysis by `Velociraptor`
+- **workflow/velocity.smk**: RNA velocity analysis by `XXXXXXX`
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/velocity.png?raw=true)
 
@@ -33,7 +37,7 @@ This workflow consists of 11 workflows as follows:
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/plot.png?raw=true)
 
-- **workflow/report.smk**: Interactive report by `Pagoda2`
+- **workflow/report.smk**: Interactive report by `scTGIF`
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/report.png?raw=true)
 
@@ -41,13 +45,9 @@ This workflow consists of 11 workflows as follows:
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/celltyping.png?raw=true)
 
-- **workflow/plot_aftercelltyping.smk**: Plots against cell type labels (after celltyping)
-
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/plot_aftercelltyping.png?raw=true)
-
 ## Requirements
 - Bash: GNU bash, version 4.2.46(1)-release (x86_64-redhat-linux-gnu)
-- Snakemake: 7.1.0
+- Snakemake: 6.5.3
 - Singularity: 3.8.0
 
 ## How to reproduce this workflow
@@ -55,6 +55,7 @@ This workflow consists of 11 workflows as follows:
 
 ```
 snakemake -s workflow/download.smk -j 4 --use-singularity
+snakemake -s workflow/preprocess.smk -j 4 --use-singularity
 snakemake -s workflow/gtf.smk -j 4 --use-singularity
 snakemake -s workflow/cellranger.smk -j 4 --use-singularity
 snakemake -s workflow/seurat.smk -j 4 --use-singularity
@@ -63,15 +64,14 @@ snakemake -s workflow/trajectory.smk -j 4 --use-singularity
 snakemake -s workflow/velocity.smk -j 4 --use-singularity
 snakemake -s workflow/plot.smk -j 4 --use-singularity
 snakemake -s workflow/report.smk -j 4 --use-singularity
-
 snakemake -s workflow/celltyping.smk -j 4 --use-singularity
-snakemake -s workflow/plot_aftercelltyping.smk -j 4 --use-singularity
 ```
 
 ### In Open Grid Engine
 
 ```
 snakemake -s workflow/download.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
+snakemake -s workflow/preprocess.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/gtf.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/cellranger.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/seurat.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
@@ -80,15 +80,14 @@ snakemake -s workflow/trajectory.smk -j 32 --cluster qsub --latency-wait 600 --u
 snakemake -s workflow/velocity.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/plot.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/report.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
-
 snakemake -s workflow/celltyping.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
-snakemake -s workflow/plot_aftercelltyping.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 ```
 
 ### In Slurm
 
 ```
 snakemake -s workflow/download.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
+snakemake -s workflow/preprocess.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/gtf.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/cellranger.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/seurat.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
@@ -97,9 +96,7 @@ snakemake -s workflow/trajectory.smk -j 32 --cluster sbatch --latency-wait 600 -
 snakemake -s workflow/velocity.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/plot.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/report.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
-
 snakemake -s workflow/celltyping.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
-snakemake -s workflow/plot_aftercelltyping.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 ```
 
 ## License

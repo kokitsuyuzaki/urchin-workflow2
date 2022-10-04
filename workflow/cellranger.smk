@@ -4,7 +4,7 @@ from snakemake.utils import min_version
 #################################
 # Setting
 #################################
-min_version("7.1.0")
+min_version("6.5.3")
 
 SAMPLES = ['SeaUrchin-scRNA-01', 'SeaUrchin-scRNA-02', 'SeaUrchin-scRNA-03',
     'SeaUrchin-scRNA-04', 'SeaUrchin-scRNA-05', 'SeaUrchin-scRNA-06',

@@ -5,9 +5,7 @@ infile <- commandArgs(trailingOnly=TRUE)[1]
 outfile <- commandArgs(trailingOnly=TRUE)[2]
 
 # Loading
-load(infile)
+annotation <- read.xlsx(infile, sheetIndex=1)
 
-# Plot
-png(file=outfile, width=600, height=600)
-DimPlot(seurat.obj, label=TRUE, pt.size=2, label.size=6)
-dev.off()
+# Save
+save(annotation, file=outfile)

@@ -4,7 +4,7 @@ from snakemake.utils import min_version
 #################################
 # Setting
 #################################
-min_version("7.1.0")
+min_version("6.5.3")
 
 container: 'docker://litd/docker-cellranger:v7.0.0'
 
@@ -21,6 +21,7 @@ rule all:
             file=HPBASE_FILES),
         expand('data/echinobase/{file}',
             file=ECHINOBASE_FILES),
+        'data/GeneGoTerms.txt'
 
 #################################
 # Data download
@@ -48,3 +49,15 @@ rule download_echinobase:
         'logs/download_echinobase_{file}.log'
     shell:
         'src/download_echinobase.sh {wildcards.file} >& {log}'
+
+rule download_go:
+    output:
+        'data/GeneGoTerms.txt'
+    resources:
+        mem_gb=100
+    benchmark:
+        'benchmarks/download_go.txt'
+    log:
+        'logs/download_go.log'
+    shell:
+        'src/download_go.sh {output} >& {log}'

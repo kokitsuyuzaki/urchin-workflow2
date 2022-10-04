@@ -10,4 +10,4 @@
 #SBATCH -p node03-06
 SLURM_RESTART_COUNT=2
 
-Rscript src/geneid_to_genename.R $@
+Rscript src/featureplot_marker.R $@

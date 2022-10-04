@@ -4,7 +4,7 @@ from snakemake.utils import min_version
 #################################
 # Setting
 #################################
-min_version("7.1.0")
+min_version("6.5.3")
 
 container: 'docker://koki/urchin_workflow_bioconda:20220527'
 
@@ -12,10 +12,6 @@ rule all:
     input:
         'data/hpbase/trim.HpulGenome_v1.gtf',
         'data/echinobase/trim.sp5_0_GCF.gtf'
-
-#################################
-# Cell Ranger Mkref
-#################################
 
 rule trim_gff_hpbase:
     input:

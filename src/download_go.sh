@@ -10,4 +10,4 @@
 #SBATCH -p node03-06
 SLURM_RESTART_COUNT=2
 
-Rscript src/dimplot_integrated.R $@
+wget https://ftp.echinobase.org/pub/GenePageReports/GeneGoTerms.txt -P data
