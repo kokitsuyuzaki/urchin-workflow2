@@ -15,6 +15,8 @@ container: 'docker://koki/urchin_workflow_seurat:20221004'
 
 rule all:
     input:
+        'data/hpbase/HpulGenome_v1_geneid.gtf',
+        'data/echinobase/sp5_0_GCF_geneid.gtf',
         'data/geneid_to_genename.csv',
         'data/annotation.RData',
         'data/marker.RData',
@@ -24,6 +26,37 @@ rule all:
         'data/go_bp_echinobase.RData',
         'data/go_mf_echinobase.RData',
         'data/go_cc_echinobase.RData'
+
+#################################
+# GTF files for RNA Velocity
+#################################
+rule gtf_hpbase:
+    input:
+        'data/hpbase/HpulGenome_v1.gtf'
+    output:
+        'data/hpbase/HpulGenome_v1_geneid.gtf'
+    resources:
+        mem_gb=100
+    benchmark:
+        'benchmarks/gtf_hpbase.txt'
+    log:
+        'logs/gtf_hpbase.log'
+    shell:
+        'src/gtf_geneid.sh {input} {output} >& {log}'
+
+rule gtf_echinobase:
+    input:
+        'data/echinobase/sp5_0_GCF.gtf'
+    output:
+        'data/echinobase/sp5_0_GCF_geneid.gtf'
+    resources:
+        mem_gb=100
+    benchmark:
+        'benchmarks/gtf_echinobase.txt'
+    log:
+        'logs/gtf_echinobase.log'
+    shell:
+        'src/gtf_geneid.sh {input} {output} >& {log}'
 
 #################################
 # Corresponding Table for ID conversion

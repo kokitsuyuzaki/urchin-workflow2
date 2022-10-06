@@ -54,6 +54,6 @@ DimPlot(seurat.integrated, pt.size=2, label.size=6)
 dev.off()
 
 # Plot
-png(file=outfile3, width=1200, height=600)
+png(file=outfile3, width=2000, height=1000)
 DimPlot(seurat.integrated, split.by="sample", pt.size=2, label.size=6, ncol=4)
 dev.off()

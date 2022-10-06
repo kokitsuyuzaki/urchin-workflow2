@@ -17,6 +17,8 @@ if(db == "hpbase"){
 }
 marker <- intersect(marker, rownames(seurat.integrated))
 
+seuratList <- .stratifySeurat(seurat.integrated, group_names)
+
 for(i in seq_along(marker)){
     filename1 <- paste0(gsub("FINISH_marker", "", outfile), marker[i], ".png")
     # replace "/" in the gene name with "_"
@@ -40,8 +42,8 @@ for(i in seq_along(marker)){
     dev.off()
     # Plot
     filename2 <- gsub(".png", "_splitby.png", filename1)
-    png(file=filename2, width=4800, height=600)
-    print(FeaturePlot(seurat.integrated, features=marker[i], split.by="sample", pt.size=2, label.size=6))
+    png(file=filename2, width=2000, height=1000)
+    print(.panelPlot(seuratList, group_names, marker[i]))
     dev.off()
 }
 

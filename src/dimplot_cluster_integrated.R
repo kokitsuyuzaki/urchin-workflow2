@@ -15,7 +15,7 @@ p2 <- DimPlot(seurat.integrated, reduction = "umap", label=TRUE, pt.size=2, labe
 p1 + p2
 dev.off()
 
-png(file=outfile2, width=1200, height=600)
+png(file=outfile2, width=2000, height=1000)
 DimPlot(seurat.integrated, reduction = "umap", split.by="sample",
     ncol=4, label=TRUE, pt.size=2, label.size=6) + NoLegend()
 dev.off()

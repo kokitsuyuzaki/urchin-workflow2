@@ -19,8 +19,8 @@ FeaturePlot(seurat.integrated, features="DoubletScore",
     reduction = "umap", pt.size=2, label.size=6)
 dev.off()
 
-png(file=outfile2, width=4800, height=600)
-FeaturePlot(seurat.integrated, features="DoubletScore",
-    reduction = "umap", split.by="sample",
-    pt.size=2, label.size=6)
+seuratList <- .stratifySeurat(seurat.integrated, group_names)
+png(file=outfile2, width=2000, height=1000)
+.panelPlot(seuratList, group_names, "DoubletScore")
 dev.off()
+
