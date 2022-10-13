@@ -67,7 +67,7 @@ genes_ridgeplot_echinobase <- c("Sp-Pcna", "Sp-Srrm2", "Sp-Tpx2L1",
     length(gList) <- length(group_names)
     for(i in seq_along(group_names)){
         gList[[i]] <- FeaturePlot(seuratList[[i]], features=features,
-            reduction = "umap", pt.size=2, label.size=6) + labs(title=group_names[i])
+            reduction = "umap", pt.size=2, label.size=6) + labs(title=group_names[i]) + xlim(c(-15,15)) + ylim(c(-15,15))
 
     }
     names(gList) <- group_names

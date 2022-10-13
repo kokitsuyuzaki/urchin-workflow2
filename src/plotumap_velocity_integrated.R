@@ -35,7 +35,7 @@ for(i in seq_along(group_names)){
     if(length(which(is.nan(em))) == 0){
         gList[[i]] <- plotUMAP(veloList[[i]], colour_by="velocity_pseudotime") +
             geom_segment(data=grid.df, mapping=aes(x=start.V1, y=start.V2,
-            xend=end.V1, yend=end.V2), arrow=arrow(length=unit(0.05, "inches"))) + labs(title = group_names[[i]])
+            xend=end.V1, yend=end.V2), arrow=arrow(length=unit(0.05, "inches"))) + labs(title = group_names[[i]]) + xlim(c(-15,15)) + ylim(c(-15,15))
     }else{
         gList[[i]] <- ggplot()
     }

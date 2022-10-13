@@ -11,7 +11,7 @@ SAMPLES = ['SeaUrchin-scRNA-01', 'SeaUrchin-scRNA-02', 'SeaUrchin-scRNA-03',
     'SeaUrchin-scRNA-07', 'SeaUrchin-scRNA-08']
 DBS = ['hpbase', 'echinobase']
 
-container: 'docker://koki/urchin_workflow_seurat:20221004'
+container: 'docker://koki/urchin_workflow_seurat:20221013'
 
 rule all:
     input:

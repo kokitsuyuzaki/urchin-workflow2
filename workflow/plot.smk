@@ -12,7 +12,7 @@ SAMPLES = ['SeaUrchin-scRNA-01', 'SeaUrchin-scRNA-02', 'SeaUrchin-scRNA-03',
 
 DBS = ['hpbase', 'echinobase']
 
-MODES = ['steady_state', 'deterministic', 'stochastic']
+MODES = ['steady_state', 'deterministic', 'stochastic', 'dynamical']
 
 SAMPLE_PLOTS = ['elbowplot.png',
     'dimplot_cluster.png', 'featureplot_ncount_rna.png',
@@ -43,11 +43,15 @@ rule all:
             db=DBS, integrated_plot=INTEGRATED_PLOTS),
         expand('plot/{db}/{sample}/plotumap_velocity_{mode}.png',
             db=DBS, sample=SAMPLES, mode=MODES),
-        expand('plot/{db}/{sample}/plotvelocitystream_velocity_{mode}.png',
-            db=DBS, sample=SAMPLES, mode=MODES),
         expand('plot/{db}/integrated/plotumap_velocity_{mode}.png',
             db=DBS, mode=MODES),
+        expand('plot/{db}/aggr/plotumap_velocity_{mode}.png',
+            db=DBS, mode=MODES),
+        expand('plot/{db}/{sample}/plotvelocitystream_velocity_{mode}.png',
+            db=DBS, sample=SAMPLES, mode=MODES),
         expand('plot/{db}/integrated/plotvelocitystream_velocity_{mode}.png',
+            db=DBS, mode=MODES),
+        expand('plot/{db}/aggr/plotvelocitystream_velocity_{mode}.png',
             db=DBS, mode=MODES)
 
 #################################
@@ -59,11 +63,11 @@ rule elbowplot:
     output:
         'plot/{db}/{sample}/elbowplot.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/elbowplot_{db}_{sample}.txt'
     log:
@@ -77,9 +81,9 @@ rule elbowplot_integrated:
     output:
         'plot/{db}/integrated/elbowplot.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/elbowplot_integrated_{db}_integrated.txt'
     log:
@@ -97,11 +101,11 @@ rule dimplot_cluster:
     output:
         'plot/{db}/{sample}/dimplot_cluster.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/dimplot_cluster_{db}_{sample}.txt'
     log:
@@ -116,9 +120,9 @@ rule dimplot_cluster_integrated:
         'plot/{db}/integrated/dimplot_cluster.png',
         'plot/{db}/integrated/dimplot_cluster_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/dimplot_cluster_integrated_{db}_integrated.txt'
     log:
@@ -135,11 +139,11 @@ rule featureplot_ncount_rna:
     output:
         'plot/{db}/{sample}/featureplot_ncount_rna.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_ncount_rna_{db}_{sample}.txt'
     log:
@@ -154,9 +158,9 @@ rule featureplot_ncount_rna_integrated:
         'plot/{db}/integrated/featureplot_ncount_rna.png',
         'plot/{db}/integrated/featureplot_ncount_rna_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_ncount_rna_integrated_{db}_integrated.txt'
     log:
@@ -173,11 +177,11 @@ rule featureplot_nfeature_rna:
     output:
         'plot/{db}/{sample}/featureplot_nfeature_rna.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_nfeature_rna_{db}_{sample}.txt'
     log:
@@ -192,9 +196,9 @@ rule featureplot_nfeature_rna_integrated:
         'plot/{db}/integrated/featureplot_nfeature_rna.png',
         'plot/{db}/integrated/featureplot_nfeature_rna_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_nfeature_rna_integrated_{db}_integrated.txt'
     log:
@@ -212,11 +216,11 @@ rule featureplot_percent_mt:
     output:
         'plot/{db}/{sample}/featureplot_percent_mt.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_percent_mt_{db}_{sample}.txt'
     log:
@@ -232,9 +236,9 @@ rule featureplot_percent_mt_integrated:
         'plot/{db}/integrated/featureplot_percent_mt.png',
         'plot/{db}/integrated/featureplot_percent_mt_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_percent_mt_integrated_{db}_integrated.txt'
     log:
@@ -252,11 +256,11 @@ rule featureplot_percent_rb:
     output:
         'plot/{db}/{sample}/featureplot_percent_rb.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_percent_rb_{db}_{sample}.txt'
     log:
@@ -272,9 +276,9 @@ rule featureplot_percent_rb_integrated:
         'plot/{db}/integrated/featureplot_percent_rb.png',
         'plot/{db}/integrated/featureplot_percent_rb_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_percent_rb_integrated_{db}_integrated.txt'
     log:
@@ -293,11 +297,11 @@ rule dimplot_cellcycle:
         'plot/{db}/{sample}/ridgeplot_cellcycle.png',
         'plot/{db}/{sample}/dimplot_cellcycle.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/dimplot_cellcycle_{db}_{sample}.txt'
     log:
@@ -314,9 +318,9 @@ rule dimplot_cellcycle_integrated:
         'plot/{db}/integrated/dimplot_cellcycle.png',
         'plot/{db}/integrated/dimplot_cellcycle_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/dimplot_cellcycle_integrated_{db}_integrated.txt'
     log:
@@ -334,11 +338,11 @@ rule featureplot_marker:
     output:
         'plot/{db}/{sample}/marker/FINISH_marker'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_marker_{db}_{sample}.txt'
     log:
@@ -353,9 +357,9 @@ rule featureplot_marker_integrated:
     output:
         'plot/{db}/integrated/marker/FINISH_marker'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_marker_integrated_{db}_integrated.txt'
     log:
@@ -373,11 +377,11 @@ rule featureplot_cluster_marker:
     output:
         'plot/{db}/{sample}/marker/FINISH_cluster_marker'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_cluster_marker_{db}_{sample}.txt'
     log:
@@ -392,9 +396,9 @@ rule featureplot_cluster_marker_integrated:
     output:
         'plot/{db}/integrated/marker/FINISH_cluster_marker'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_cluster_marker_integrated_{db}_integrated.txt'
     log:
@@ -412,11 +416,11 @@ rule featureplot_doublet:
     output:
         'plot/{db}/{sample}/featureplot_doublet.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_doublet_{db}_{sample}.txt'
     log:
@@ -432,9 +436,9 @@ rule featureplot_doublet_integrated:
         'plot/{db}/integrated/featureplot_doublet.png',
         'plot/{db}/integrated/featureplot_doublet_splitby.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/featureplot_doublet_integrated_{db}_integrated.txt'
     log:
@@ -451,11 +455,11 @@ rule plot_cells_trajectory:
     output:
         'plot/{db}/{sample}/plot_cells_trajectory.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/plot_cells_trajectory_{db}_{sample}.txt'
     log:
@@ -463,15 +467,15 @@ rule plot_cells_trajectory:
     shell:
         'src/plot_cells_trajectory.sh {input} {output} >& {log}'
 
-rule plot_cells_trajectory_integrated:
+rule plot_cells_traectory_integrated:
     input:
         'output/{db}/integrated/monocle3.RData'
     output:
         'plot/{db}/integrated/plot_cells_trajectory.png'
     container:
-        'docker://koki/urchin_workflow_seurat:20221004'
+        'docker://koki/urchin_workflow_seurat:20221013'
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/plot_cells_trajectory_integrated_{db}_integrated.txt'
     log:
@@ -494,7 +498,7 @@ rule plotumap_velocity:
         sample='|'.join([re.escape(x) for x in SAMPLES]),
         mode='|'.join([re.escape(x) for x in MODES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/plotumap_velocity_{db}_{sample}_{mode}.txt'
     log:
@@ -513,13 +517,29 @@ rule plotumap_velocity_integrated:
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/plotumap_velocity_{db}_integrated_{mode}.txt'
     log:
         'logs/plotumap_velocity_{db}_integrated_{mode}.log'
     shell:
         'src/plotumap_velocity_integrated.sh {wildcards.db} {wildcards.mode} {output} >& {log}'
+
+rule plotumap_velocity_aggr:
+    input:
+        'output/{db}/aggr/velociraptor_{mode}.RData'
+    output:
+        'plot/{db}/aggr/plotumap_velocity_{mode}.png'
+    container:
+        'docker://koki/velocytor:20221006'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/plotumap_velocity_{db}_aggr_{mode}.txt'
+    log:
+        'logs/plotumap_velocity_{db}_aggr_{mode}.log'
+    shell:
+        'src/plotumap_velocity_aggr.sh {wildcards.db} {input} {output} >& {log}'
 
 rule plotvelocitystream_velocity:
     input:
@@ -531,7 +551,7 @@ rule plotvelocitystream_velocity:
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/plotvelocitystream_velocity_{db}_{sample}_{mode}.txt'
     log:
@@ -550,10 +570,26 @@ rule plotvelocitystream_velocity_integrated:
     wildcard_constraints:
         sample='|'.join([re.escape(x) for x in SAMPLES])
     resources:
-        mem_gb=500
+        mem_gb=1000
     benchmark:
         'benchmarks/plotvelocitystream_velocity_{db}_integrated_{mode}.txt'
     log:
         'logs/plotvelocitystream_velocity_{db}_integrated_{mode}.log'
     shell:
         'src/plotvelocitystream_velocity_integrated.sh {wildcards.db} {wildcards.mode} {output} >& {log}'
+
+rule plotvelocitystream_velocity_aggr:
+    input:
+        'output/{db}/aggr/velociraptor_{mode}.RData'
+    output:
+        'plot/{db}/aggr/plotvelocitystream_velocity_{mode}.png'
+    container:
+        'docker://koki/velocytor:20221006'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/plotvelocitystream_velocity_{db}_aggr_{mode}.txt'
+    log:
+        'logs/plotvelocitystream_velocity_{db}_aggr_{mode}.log'
+    shell:
+        'src/plotvelocitystream_velocity_aggr.sh {wildcards.db} {input} {output} >& {log}'

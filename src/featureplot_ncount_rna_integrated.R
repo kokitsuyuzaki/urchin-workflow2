@@ -14,7 +14,7 @@ seurat.integrated[["Log10_nCount_RNA"]] <- log10(seurat.integrated@meta.data$nCo
 # Plot
 png(file=outfile1, width=600, height=600)
 FeaturePlot(seurat.integrated, features="Log10_nCount_RNA",
-    reduction = "umap", pt.size=2, label.size=6)
+    reduction = "umap", pt.size=2, label.size=6) + xlim(c(-15,15)) + ylim(c(-15,15))
 dev.off()
 
 # Plot

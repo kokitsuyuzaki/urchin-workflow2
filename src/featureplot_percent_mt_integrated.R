@@ -27,7 +27,7 @@ seurat.integrated[["percent.mt"]] <- percent.mt
 # Plot
 png(file=outfile1, width=600, height=600)
 FeaturePlot(seurat.integrated, features="percent.mt",
-    reduction = "umap", pt.size=2, label.size=6)
+    reduction = "umap", pt.size=2, label.size=6) + xlim(c(-15,15)) + ylim(c(-15,15))
 dev.off()
 
 seuratList <- .stratifySeurat(seurat.integrated, group_names)

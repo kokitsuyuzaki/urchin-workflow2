@@ -32,7 +32,7 @@ for(i in seq_along(group_names)){
 
     # Plot object
     if(length(which(is.nan(em))) == 0){
-        gList[[i]] <- plotVelocityStream(veloList[[i]], em, color.streamlines=TRUE, use.dimred="UMAP") + labs(title = group_names[[i]])
+        gList[[i]] <- plotVelocityStream(veloList[[i]], em, color.streamlines=TRUE, use.dimred="UMAP") + labs(title = group_names[[i]]) + xlim(c(-15,15)) + ylim(c(-15,15))
     }else{
         gList[[i]] <- ggplot()
     }

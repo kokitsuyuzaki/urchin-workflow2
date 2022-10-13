@@ -38,7 +38,7 @@ for(i in seq_along(marker)){
     }
     # Plot
     png(file=filename1, width=600, height=600)
-    print(FeaturePlot(seurat.integrated, features=marker[i], pt.size=2, label.size=6))
+    print(FeaturePlot(seurat.integrated, features=marker[i], pt.size=2, label.size=6) + xlim(c(-15,15)) + ylim(c(-15,15)))
     dev.off()
     # Plot
     filename2 <- gsub(".png", "_splitby.png", filename1)

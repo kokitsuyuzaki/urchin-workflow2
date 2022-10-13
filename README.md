@@ -29,7 +29,7 @@ This workflow consists of 11 workflows as follows:
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/trajectory.png?raw=true)
 
-- **workflow/velocity.smk**: RNA velocity analysis by `XXXXXXX`
+- **workflow/velocity.smk**: RNA velocity analysis by `Velocyto`, `scVelo`, and `Velociraptor`.
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/velocity.png?raw=true)
 
