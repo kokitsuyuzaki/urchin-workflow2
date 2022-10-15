@@ -12,7 +12,7 @@ SAMPLES = ['SeaUrchin-scRNA-01', 'SeaUrchin-scRNA-02', 'SeaUrchin-scRNA-03',
 
 DBS = ['hpbase', 'echinobase']
 
-MODES = ['steady_state', 'deterministic', 'stochastic', 'dynamical']
+MODES = ['deterministic', 'stochastic', 'dynamical']
 
 SAMPLE_PLOTS = ['elbowplot.png',
     'dimplot_cluster.png', 'featureplot_ncount_rna.png',
@@ -41,18 +41,26 @@ rule all:
             sample=SAMPLES, db=DBS, sample_plot=SAMPLE_PLOTS),
         expand('plot/{db}/integrated/{integrated_plot}',
             db=DBS, integrated_plot=INTEGRATED_PLOTS),
-        expand('plot/{db}/{sample}/plotumap_velocity_{mode}.png',
+        expand('plot/{db}/{sample}/scv_pl_proportions_{sample}_dynamical.png',
             db=DBS, sample=SAMPLES, mode=MODES),
-        expand('plot/{db}/integrated/plotumap_velocity_{mode}.png',
+        expand('plot/{db}/integrated/scv_pl_proportions_integrated_dynamical.png',
             db=DBS, mode=MODES),
-        expand('plot/{db}/aggr/plotumap_velocity_{mode}.png',
-            db=DBS, mode=MODES),
-        expand('plot/{db}/{sample}/plotvelocitystream_velocity_{mode}.png',
+        expand('plot/{db}/{sample}/scv_pl_velocity_embedding_stream_{sample}_{mode}.png',
             db=DBS, sample=SAMPLES, mode=MODES),
-        expand('plot/{db}/integrated/plotvelocitystream_velocity_{mode}.png',
-            db=DBS, mode=MODES),
-        expand('plot/{db}/aggr/plotvelocitystream_velocity_{mode}.png',
-            db=DBS, mode=MODES)
+        expand('plot/{db}/integrated/scv_pl_velocity_embedding_stream_integrated_{mode}.png',
+            db=DBS, sample=SAMPLES, mode=MODES),
+        expand('plot/{db}/{sample}/scv_pl_velocity_embedding_{sample}_{mode}.png',
+            db=DBS, sample=SAMPLES, mode=MODES),
+        expand('plot/{db}/integrated/scv_pl_velocity_embedding_integrated_{mode}.png',
+            db=DBS, sample=SAMPLES, mode=MODES),
+        expand('plot/{db}/{sample}/scv_pl_latenttime_{sample}_dynamical.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/integrated/scv_pl_latenttime_integrated_dynamical.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/{sample}/scv_pl_heatmap_{sample}_dynamical.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/integrated/scv_pl_heatmap_integrated_dynamical.png',
+            db=DBS, sample=SAMPLES)
 
 #################################
 # Elbow Plot
@@ -486,13 +494,13 @@ rule plot_cells_traectory_integrated:
 #################################
 # RNA Velocity
 #################################
-rule plotumap_velocity:
+rule scv_pl_proportions:
     input:
-        'output/{db}/{sample}/velociraptor_{mode}.RData'
+        'output/{db}/{sample}/velocyto/{sample}_dynamical.h5ad'
     output:
-        'plot/{db}/{sample}/plotumap_velocity_{mode}.png'
+        'plot/{db}/{sample}/scv_pl_proportions_{sample}_dynamical.png'
     container:
-        'docker://koki/velocytor:20221006'
+        'docker://koki/velocyto:20221005'
     wildcard_constraints:
         db='|'.join([re.escape(x) for x in DBS]),
         sample='|'.join([re.escape(x) for x in SAMPLES]),
@@ -500,96 +508,168 @@ rule plotumap_velocity:
     resources:
         mem_gb=1000
     benchmark:
-        'benchmarks/plotumap_velocity_{db}_{sample}_{mode}.txt'
+        'benchmarks/scv_pl_proportions_{db}_{sample}_dynamical.txt'
     log:
-        'logs/plotumap_velocity_{db}_{sample}_{mode}.log'
+        'logs/scv_pl_proportions_{db}_{sample}_dynamical.log'
     shell:
-        'src/plotumap_velocity.sh {wildcards.db} {wildcards.sample} {input} {output} >& {log}'
+        'src/scv_pl_proportions.sh {input} {output} >& {log}'
 
-rule plotumap_velocity_integrated:
+rule scv_pl_proportions_integrated:
     input:
-        expand('output/{db}/{sample}/velociraptor_{mode}.RData',
-            db=DBS, sample=SAMPLES, mode=MODES)
+        'output/{db}/integrated/velocyto/integrated_dynamical.h5ad'
     output:
-        'plot/{db}/integrated/plotumap_velocity_{mode}.png'
+        'plot/{db}/integrated/scv_pl_proportions_integrated_dynamical.png'
     container:
-        'docker://koki/velocytor:20221006'
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_proportions_{db}_integrated_dynamical.txt'
+    log:
+        'logs/scv_pl_proportions_{db}_integrated_dynamical.log'
+    shell:
+        'src/scv_pl_proportions.sh {input} {output} >& {log}'
+
+rule scv_pl_velocity_embedding_stream:
+    input:
+        'output/{db}/{sample}/velocyto/{sample}_{mode}.h5ad'
+    output:
+        'plot/{db}/{sample}/scv_pl_velocity_embedding_stream_{sample}_{mode}.png'
+    container:
+        'docker://koki/velocyto:20221005'
     wildcard_constraints:
-        sample='|'.join([re.escape(x) for x in SAMPLES])
+        db='|'.join([re.escape(x) for x in DBS]),
+        sample='|'.join([re.escape(x) for x in SAMPLES]),
+        mode='|'.join([re.escape(x) for x in MODES])
     resources:
         mem_gb=1000
     benchmark:
-        'benchmarks/plotumap_velocity_{db}_integrated_{mode}.txt'
+        'benchmarks/scv_pl_velocity_embedding_stream_{db}_{sample}_{mode}.txt'
     log:
-        'logs/plotumap_velocity_{db}_integrated_{mode}.log'
+        'logs/scv_pl_velocity_embedding_stream_{db}_{sample}_{mode}.log'
     shell:
-        'src/plotumap_velocity_integrated.sh {wildcards.db} {wildcards.mode} {output} >& {log}'
+        'src/scv_pl_velocity_embedding_stream.sh {input} {output} >& {log}'
 
-rule plotumap_velocity_aggr:
+rule scv_pl_velocity_embedding_stream_integrated:
     input:
-        'output/{db}/aggr/velociraptor_{mode}.RData'
+        'output/{db}/integrated/velocyto/integrated_{mode}.h5ad'
     output:
-        'plot/{db}/aggr/plotumap_velocity_{mode}.png'
+        'plot/{db}/integrated/scv_pl_velocity_embedding_stream_integrated_{mode}.png'
     container:
-        'docker://koki/velocytor:20221006'
+        'docker://koki/velocyto:20221005'
     resources:
         mem_gb=1000
     benchmark:
-        'benchmarks/plotumap_velocity_{db}_aggr_{mode}.txt'
+        'benchmarks/scv_pl_velocity_embedding_stream_{db}_integrated_{mode}.txt'
     log:
-        'logs/plotumap_velocity_{db}_aggr_{mode}.log'
+        'logs/scv_pl_velocity_embedding_stream_{db}_integrated_{mode}.log'
     shell:
-        'src/plotumap_velocity_aggr.sh {wildcards.db} {input} {output} >& {log}'
+        'src/scv_pl_velocity_embedding_stream.sh {input} {output} >& {log}'
 
-rule plotvelocitystream_velocity:
+rule scv_pl_velocity_embedding:
     input:
-        'output/{db}/{sample}/velociraptor_{mode}.RData'
+        'output/{db}/{sample}/velocyto/{sample}_{mode}.h5ad'
     output:
-        'plot/{db}/{sample}/plotvelocitystream_velocity_{mode}.png'
+        'plot/{db}/{sample}/scv_pl_velocity_embedding_{sample}_{mode}.png'
     container:
-        'docker://koki/velocytor:20221006'
+        'docker://koki/velocyto:20221005'
     wildcard_constraints:
-        sample='|'.join([re.escape(x) for x in SAMPLES])
+        db='|'.join([re.escape(x) for x in DBS]),
+        sample='|'.join([re.escape(x) for x in SAMPLES]),
+        mode='|'.join([re.escape(x) for x in MODES])
     resources:
         mem_gb=1000
     benchmark:
-        'benchmarks/plotvelocitystream_velocity_{db}_{sample}_{mode}.txt'
+        'benchmarks/scv_pl_velocity_embedding_{db}_{sample}_{mode}.txt'
     log:
-        'logs/plotvelocitystream_velocity_{db}_{sample}_{mode}.log'
+        'logs/scv_pl_velocity_embedding_{db}_{sample}_{mode}.log'
     shell:
-        'src/plotvelocitystream_velocity.sh {wildcards.db} {wildcards.sample} {input} {output} >& {log}'
+        'src/scv_pl_velocity_embedding.sh {input} {output} >& {log}'
 
-rule plotvelocitystream_velocity_integrated:
+rule scv_pl_velocity_embedding_integrated:
     input:
-        expand('output/{db}/{sample}/velociraptor_{mode}.RData',
-            db=DBS, sample=SAMPLES, mode=MODES)
+        'output/{db}/integrated/velocyto/integrated_{mode}.h5ad'
     output:
-        'plot/{db}/integrated/plotvelocitystream_velocity_{mode}.png'
+        'plot/{db}/integrated/scv_pl_velocity_embedding_integrated_{mode}.png'
     container:
-        'docker://koki/velocytor:20221006'
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_velocity_embedding_{db}_integrated_{mode}.txt'
+    log:
+        'logs/scv_pl_velocity_embedding_{db}_integrated_{mode}.log'
+    shell:
+        'src/scv_pl_velocity_embedding.sh {input} {output} >& {log}'
+
+rule scv_pl_latenttime:
+    input:
+        'output/{db}/{sample}/velocyto/{sample}_dynamical.h5ad'
+    output:
+        'plot/{db}/{sample}/scv_pl_latenttime_{sample}_dynamical.png'
+    container:
+        'docker://koki/velocyto:20221005'
     wildcard_constraints:
-        sample='|'.join([re.escape(x) for x in SAMPLES])
+        db='|'.join([re.escape(x) for x in DBS]),
+        sample='|'.join([re.escape(x) for x in SAMPLES]),
+        mode='|'.join([re.escape(x) for x in MODES])
     resources:
         mem_gb=1000
     benchmark:
-        'benchmarks/plotvelocitystream_velocity_{db}_integrated_{mode}.txt'
+        'benchmarks/scv_pl_latenttime_{db}_{sample}_dynamical.txt'
     log:
-        'logs/plotvelocitystream_velocity_{db}_integrated_{mode}.log'
+        'logs/scv_pl_latenttime_{db}_{sample}_dynamical.log'
     shell:
-        'src/plotvelocitystream_velocity_integrated.sh {wildcards.db} {wildcards.mode} {output} >& {log}'
+        'src/scv_pl_latenttime.sh {input} {output} >& {log}'
 
-rule plotvelocitystream_velocity_aggr:
+rule scv_pl_latenttime_integrated:
     input:
-        'output/{db}/aggr/velociraptor_{mode}.RData'
+        'output/{db}/integrated/velocyto/integrated_dynamical.h5ad'
     output:
-        'plot/{db}/aggr/plotvelocitystream_velocity_{mode}.png'
+        'plot/{db}/integrated/scv_pl_latenttime_integrated_dynamical.png'
     container:
-        'docker://koki/velocytor:20221006'
+        'docker://koki/velocyto:20221005'
     resources:
         mem_gb=1000
     benchmark:
-        'benchmarks/plotvelocitystream_velocity_{db}_aggr_{mode}.txt'
+        'benchmarks/scv_pl_latenttime_{db}_integrated_dynamical.txt'
     log:
-        'logs/plotvelocitystream_velocity_{db}_aggr_{mode}.log'
+        'logs/scv_pl_latenttime_{db}_integrated_dynamical.log'
     shell:
-        'src/plotvelocitystream_velocity_aggr.sh {wildcards.db} {input} {output} >& {log}'
+        'src/scv_pl_latenttime.sh {input} {output} >& {log}'
+
+rule scv_pl_heatmap:
+    input:
+        'output/{db}/{sample}/velocyto/{sample}_dynamical.h5ad'
+    output:
+        'plot/{db}/{sample}/scv_pl_heatmap_{sample}_dynamical.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    wildcard_constraints:
+        db='|'.join([re.escape(x) for x in DBS]),
+        sample='|'.join([re.escape(x) for x in SAMPLES]),
+        mode='|'.join([re.escape(x) for x in MODES])
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_heatmap_{db}_{sample}_dynamical.txt'
+    log:
+        'logs/scv_pl_heatmap_{db}_{sample}_dynamical.log'
+    shell:
+        'src/scv_pl_heatmap.sh {input} {output} >& {log}'
+
+rule scv_pl_heatmap_integrated:
+    input:
+        'output/{db}/integrated/velocyto/integrated_dynamical.h5ad'
+    output:
+        'plot/{db}/integrated/scv_pl_heatmap_integrated_dynamical.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_heatmap_{db}_integrated_dynamical.txt'
+    log:
+        'logs/scv_pl_heatmap_{db}_integrated_dynamical.log'
+    shell:
+        'src/scv_pl_heatmap.sh {input} {output} >& {log}'

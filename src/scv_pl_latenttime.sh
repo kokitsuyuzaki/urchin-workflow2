@@ -10,4 +10,4 @@
 #SBATCH -p node03-06
 SLURM_RESTART_COUNT=2
 
-Rscript src/velociraptor.R $@
+python src/scv_pl_latenttime.py $@
