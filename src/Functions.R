@@ -10,6 +10,11 @@ library("SeuratWrappers")
 library("monocle3")
 library("velociraptor")
 library("scTGIF")
+library("RColorBrewer")
+
+markers <- c("Hp-Hnf6", "Hp-Chordin", "Hp-Hox7", "Hp-FoxJ1", "Hp-BMP2_4", "Hp-Bra", "Hp-Delta", "Hp-SoxC", "Hp-Awh", "Hp-Gcm", "Hp-Blimp1", "Hp-Endo16", "Hp-Ephrin", "Hp-IrxA", "Hp-Hox11_13b", "Hp-FoxQ2", "Hp-MSP130", "Hp-Erg", "Hp-Ese", "Hp-FoxY", "Hp-Echn38", "Hp-Tph", "Hp-Pnlip-5", "Hp-Alx1", "Hp-Sm50")
+
+sample_colors <- brewer.pal(8, "Dark2")
 
 sample_names <- c("SeaUrchin-scRNA-01", "SeaUrchin-scRNA-02", "SeaUrchin-scRNA-03",
     "SeaUrchin-scRNA-04", "SeaUrchin-scRNA-05", "SeaUrchin-scRNA-06",
@@ -75,3 +80,4 @@ genes_ridgeplot_echinobase <- c("Sp-Pcna", "Sp-Srrm2", "Sp-Tpx2L1",
     # Patch work
     (gList[[1]] | gList[[2]] | gList[[3]] | gList[[4]]) / (gList[[5]] | gList[[6]] | gList[[7]] | gList[[8]])
 }
+
