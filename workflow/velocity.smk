@@ -19,7 +19,9 @@ rule all:
         expand('output/{db}/{sample}/velocyto/{sample}_{mode}.h5ad',
             db=DBS, sample=SAMPLES, mode=MODES),
         expand('output/{db}/integrated/velocyto/integrated_{mode}.h5ad',
-            db=DBS, mode=MODES)
+            db=DBS, mode=MODES),
+        expand('output/hpbase/integrated_trim/velocyto/integrated_trim_{mode}.h5ad',
+            mode=MODES)
 
 #################################
 # Generate Loom files
@@ -147,3 +149,21 @@ rule scvelo_integrated:
         'logs/scvelo_{db}_integrated_{mode}.log'
     shell:
         'src/scvelo.sh {wildcards.mode} {input} {output} >& {log}'
+
+rule scvelo_integrated_trim:
+    input:
+        'output/hpbase/aggr/velocyto/aggr.loom',
+        'output/hpbase/integrated/seurat.h5ad'
+    output:
+        'output/hpbase/integrated_trim/velocyto/integrated_trim_{mode}.h5ad'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=500
+    benchmark:
+        'benchmarks/scvelo_hpbase_integrated_trim_{mode}.txt'
+    log:
+        'logs/scvelo_hpbase_integrated_trim_{mode}.log'
+    shell:
+        'src/scvelo_trim.sh {wildcards.mode} {input} {output} >& {log}'
+

@@ -60,7 +60,28 @@ rule all:
         expand('plot/{db}/{sample}/scv_pl_heatmap_{sample}_dynamical.png',
             db=DBS, sample=SAMPLES),
         expand('plot/{db}/integrated/scv_pl_heatmap_integrated_dynamical.png',
-            db=DBS, sample=SAMPLES)
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/{sample}/scv_pl_velocity_markers_{sample}_dynamical_1.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/{sample}/scv_pl_velocity_markers_{sample}_dynamical_2.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/{sample}/scv_pl_velocity_markers_{sample}_dynamical_3.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/integrated/scv_pl_velocity_markers_integrated_dynamical_1.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/integrated/scv_pl_velocity_markers_integrated_dynamical_2.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/{db}/integrated/scv_pl_velocity_markers_integrated_dynamical_3.png',
+            db=DBS, sample=SAMPLES),
+        expand('plot/hpbase/integrated_trim/scv_pl_velocity_embedding_stream_integrated_trim_{mode}.png',
+            mode=MODES),
+        expand('plot/hpbase/integrated_trim/scv_pl_velocity_embedding_integrated_trim_{mode}.png',
+            mode=MODES),
+        'plot/hpbase/integrated_trim/scv_pl_latenttime_integrated_trim_dynamical.png',
+        'plot/hpbase/integrated_trim/scv_pl_heatmap_integrated_trim_dynamical.png',
+        'plot/hpbase/integrated_trim/scv_pl_velocity_markers_integrated_trim_dynamical_1.png',
+        'plot/hpbase/integrated_trim/scv_pl_velocity_markers_integrated_trim_dynamical_2.png',
+        'plot/hpbase/integrated_trim/scv_pl_velocity_markers_integrated_trim_dynamical_3.png'
 
 #################################
 # Elbow Plot
@@ -673,3 +694,127 @@ rule scv_pl_heatmap_integrated:
         'logs/scv_pl_heatmap_{db}_integrated_dynamical.log'
     shell:
         'src/scv_pl_heatmap.sh {input} {output} >& {log}'
+
+rule scv_pl_velocity_markers:
+    input:
+        'output/{db}/{sample}/velocyto/{sample}_dynamical.h5ad'
+    output:
+        'plot/{db}/{sample}/scv_pl_velocity_markers_{sample}_dynamical_1.png',
+        'plot/{db}/{sample}/scv_pl_velocity_markers_{sample}_dynamical_2.png',
+        'plot/{db}/{sample}/scv_pl_velocity_markers_{sample}_dynamical_3.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    wildcard_constraints:
+        db='|'.join([re.escape(x) for x in DBS]),
+        sample='|'.join([re.escape(x) for x in SAMPLES])
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_velocity_markers_{db}_{sample}_dynamical.txt'
+    log:
+        'logs/scv_pl_velocity_markers_{db}_{sample}_dynamical.log'
+    shell:
+        'src/scv_pl_velocity_markers.sh {input} {output} >& {log}'
+
+rule scv_pl_velocity_markers_integrated:
+    input:
+        'output/{db}/integrated/velocyto/integrated_dynamical.h5ad'
+    output:
+        'plot/{db}/integrated/scv_pl_velocity_markers_integrated_dynamical_1.png',
+        'plot/{db}/integrated/scv_pl_velocity_markers_integrated_dynamical_2.png',
+        'plot/{db}/integrated/scv_pl_velocity_markers_integrated_dynamical_3.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_velocity_markers_{db}_integrated_dynamical.txt'
+    log:
+        'logs/scv_pl_velocity_markers_{db}_integrated_dynamical.log'
+    shell:
+        'src/scv_pl_velocity_markers.sh {input} {output} >& {log}'
+
+#################################
+# RNA Velocity after Trimming
+#################################
+rule scv_pl_velocity_embedding_stream_integrated_trim:
+    input:
+        'output/hpbase/integrated_trim/velocyto/integrated_trim_{mode}.h5ad'
+    output:
+        'plot/hpbase/integrated_trim/scv_pl_velocity_embedding_stream_integrated_trim_{mode}.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_velocity_embedding_stream_hpbase_integrated_trim_{mode}.txt'
+    log:
+        'logs/scv_pl_velocity_embedding_stream_hpbase_integrated_trim_{mode}.log'
+    shell:
+        'src/scv_pl_velocity_embedding_stream.sh {input} {output} >& {log}'
+
+rule scv_pl_velocity_embedding_integrated_trim:
+    input:
+        'output/hpbase/integrated_trim/velocyto/integrated_trim_{mode}.h5ad'
+    output:
+        'plot/hpbase/integrated_trim/scv_pl_velocity_embedding_integrated_trim_{mode}.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_velocity_embedding_hpbase_integrated_trim_{mode}.txt'
+    log:
+        'logs/scv_pl_velocity_embedding_hpbase_integrated_trim_{mode}.log'
+    shell:
+        'src/scv_pl_velocity_embedding.sh {input} {output} >& {log}'
+
+rule scv_pl_latenttime_integrated_trim:
+    input:
+        'output/hpbase/integrated_trim/velocyto/integrated_trim_dynamical.h5ad'
+    output:
+        'plot/hpbase/integrated_trim/scv_pl_latenttime_integrated_trim_dynamical.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_latenttime_hpbase_integrated_trim_dynamical.txt'
+    log:
+        'logs/scv_pl_latenttime_hpbase_integrated_trim_dynamical.log'
+    shell:
+        'src/scv_pl_latenttime.sh {input} {output} >& {log}'
+
+rule scv_pl_heatmap_integrated_trim:
+    input:
+        'output/hpbase/integrated_trim/velocyto/integrated_trim_dynamical.h5ad'
+    output:
+        'plot/hpbase/integrated_trim/scv_pl_heatmap_integrated_trim_dynamical.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_heatmap_hpbase_integrated_trim_dynamical.txt'
+    log:
+        'logs/scv_pl_heatmap_hpbase_integrated_trim_dynamical.log'
+    shell:
+        'src/scv_pl_heatmap.sh {input} {output} >& {log}'
+
+rule scv_pl_velocity_markers_integrated_trim:
+    input:
+        'output/hpbase/integrated_trim/velocyto/integrated_trim_dynamical.h5ad'
+    output:
+        'plot/hpbase/integrated_trim/scv_pl_velocity_markers_integrated_trim_dynamical_1.png',
+        'plot/hpbase/integrated_trim/scv_pl_velocity_markers_integrated_trim_dynamical_2.png',
+        'plot/hpbase/integrated_trim/scv_pl_velocity_markers_integrated_trim_dynamical_3.png'
+    container:
+        'docker://koki/velocyto:20221005'
+    resources:
+        mem_gb=1000
+    benchmark:
+        'benchmarks/scv_pl_velocity_markers_hpbase_integrated_trim_dynamical.txt'
+    log:
+        'logs/scv_pl_velocity_markers_hpbase_integrated_trim_dynamical.log'
+    shell:
+        'src/scv_pl_velocity_markers.sh {input} {output} >& {log}'
