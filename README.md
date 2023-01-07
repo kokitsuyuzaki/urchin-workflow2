@@ -5,13 +5,13 @@ This workflow consists of 11 workflows as follows:
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/download.png?raw=true)
 
-- **workflow/preprocess.smk**: Data preprocessing
-
-![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/preprocess.png?raw=true)
-
 - **workflow/gtf.smk**: GTF file preprocessing
 
 ![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/gtf.png?raw=true)
+
+- **workflow/preprocess.smk**: Data preprocessing
+
+![](https://github.com/kokitsuyuzaki/urchin-workflow2/blob/main/plot/preprocess.png?raw=true)
 
 - **workflow/cellranger.smk**: `CellRanger` mkref and count
 
@@ -55,8 +55,8 @@ This workflow consists of 11 workflows as follows:
 
 ```
 snakemake -s workflow/download.smk -j 4 --use-singularity
-snakemake -s workflow/preprocess.smk -j 4 --use-singularity
 snakemake -s workflow/gtf.smk -j 4 --use-singularity
+snakemake -s workflow/preprocess.smk -j 4 --use-singularity
 snakemake -s workflow/cellranger.smk -j 4 --use-singularity
 snakemake -s workflow/seurat.smk -j 4 --use-singularity
 snakemake -s workflow/doublet.smk -j 4 --use-singularity
@@ -71,8 +71,8 @@ snakemake -s workflow/celltyping.smk -j 4 --use-singularity
 
 ```
 snakemake -s workflow/download.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
-snakemake -s workflow/preprocess.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/gtf.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
+snakemake -s workflow/preprocess.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/cellranger.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/seurat.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
 snakemake -s workflow/doublet.smk -j 32 --cluster qsub --latency-wait 600 --use-singularity
@@ -87,8 +87,8 @@ snakemake -s workflow/celltyping.smk -j 32 --cluster qsub --latency-wait 600 --u
 
 ```
 snakemake -s workflow/download.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
-snakemake -s workflow/preprocess.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/gtf.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
+snakemake -s workflow/preprocess.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/cellranger.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/seurat.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
 snakemake -s workflow/doublet.smk -j 32 --cluster sbatch --latency-wait 600 --use-singularity
