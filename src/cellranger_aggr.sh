@@ -12,6 +12,7 @@ SLURM_RESTART_COUNT=2
 
 cd output/$1
 
+rm -rf aggr
 cellranger aggr \
     --id=aggr \
     --csv=integrated/aggregation.csv
