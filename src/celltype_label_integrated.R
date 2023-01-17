@@ -7,7 +7,7 @@ outfile <- commandArgs(trailingOnly=TRUE)[3]
 
 # Loading
 load(infile1)
-celltype_label <- read.xlsx(infile2, sheetIndex=1)
+celltype_label <- read_excel(infile2, sheetIndex=1)
 
 # rm NA.
 celltype_label <- celltype_label[, 1:6]

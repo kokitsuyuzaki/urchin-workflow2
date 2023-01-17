@@ -14,7 +14,7 @@ DBS = ['hpbase', 'echinobase']
 
 GOS = ['bp', 'mf', 'cc']
 
-container: 'docker://koki/urchin_workflow_seurat:20221013'
+container: 'docker://koki/urchin_workflow_seurat:20230111'
 
 rule all:
     input:

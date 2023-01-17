@@ -7,14 +7,14 @@ outfile <- commandArgs(trailingOnly=TRUE)[3]
 
 # Loading
 load(infile1)
-numSheets <- loadWorkbook(infile2)$getNumberOfSheets()
+numSheets <- length(excel_sheets(infile2))
 
 # Preprocessing
 seuratList <- .stratifySeurat(seurat.integrated, group_names)
 
 for(i in seq_len(numSheets)){
     # Loading
-    marker <- read.xlsx(infile2, i)
+    marker <- read_excel(infile2, i)
     if(nrow(marker) != 0){
         # Preprocessing
         marker <- intersect(marker[,1], rownames(seurat.integrated))

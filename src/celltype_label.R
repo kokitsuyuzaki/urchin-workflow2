@@ -9,7 +9,7 @@ outfile <- commandArgs(trailingOnly=TRUE)[3]
 load(infile1)
 sample_name <- gsub("output/hpbase/", "", gsub("/seurat.RData", "", infile1))
 position <- which(sample_name == sample_names)
-celltype_label <- read.xlsx(infile2, sheetIndex=group_names[position])
+celltype_label <- read_excel(infile2, sheetIndex=group_names[position])
 
 # rm NA.
 celltype_label <- celltype_label[, 1:6]

@@ -6,14 +6,14 @@ from snakemake.utils import min_version
 #################################
 min_version("6.5.3")
 
-container: 'docker://litd/docker-cellranger:v7.0.0'
-
 HPBASE_FILES = ['HpulGenome_v1_scaffold.fa', 'HpulGenome_v1_nucl.fa',
     'HpulGenome_v1_prot.fa', 'HpulTranscriptome.fa',
     'HpulTranscriptome_nucl.fa', 'HpulTranscriptome_prot.fa',
     'HpulGenome_v1_annot.xlsx', 'HpulGenome_v1.gff3']
 ECHINOBASE_FILES = ['sp5_0_GCF_genomic.fa',
     'sp5_0_GCF.gff3', 'sp5_0_GCF_transcripts.fa']
+
+container: 'docker://litd/docker-cellranger:v7.0.0'
 
 rule all:
     input:
